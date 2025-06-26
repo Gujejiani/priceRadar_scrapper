@@ -1,8 +1,47 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Pharmacy Price Scraper
+
+This is a Next.js application that scrapes pharmacy websites to compare product prices.
+
+## Features
+
+- **Product Search**: Users can search for products across multiple pharmacy websites.
+- **Price Comparison**: The application displays prices from different pharmacies, allowing users to find the best deals.
+- **Real-time Scraping**: The app scrapes data in real-time to provide the most up-to-date information.
+
+## Tech Stack
+
+- **Framework**: [Next.js](https://nextjs.org/)
+- **Language**: [TypeScript](https://www.typescriptlang.org/)
+- **Scraping**: [Puppeteer](https://pptr.dev/)
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/)
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js (v18 or higher)
+- npm, yarn, or pnpm
+
+### Installation
+
+1.  **Clone the repository:**
+
+    ```bash
+    git clone https://github.com/your-username/pharmacy-scrapper.git
+    cd pharmacy-scrapper
+    ```
+
+2.  **Install dependencies:**
+
+    ```bash
+    npm install
+    # or
+    yarn install
+    # or
+    pnpm install
+    ```
+
+### Running the Application
 
 ```bash
 npm run dev
@@ -10,27 +49,40 @@ npm run dev
 yarn dev
 # or
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## How It Works
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+The application uses a simple API endpoint that takes a search query. This endpoint then uses Puppeteer to launch headless browser instances to scrape data from the following pharmacies:
 
-## Learn More
+-   [PSP](https://psp.ge/)
+-   [Aversi](https://aversi.ge/)
 
-To learn more about Next.js, take a look at the following resources:
+The scraped data is then returned to the client and displayed in a user-friendly format.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Project Structure
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
+/src
+|-- /app
+|   |-- /api/scrape       # API route for scraping
+|   |-- page.tsx          # Main page
+|-- /components/client
+|   |-- Search.tsx        # Search component with client-side logic
+|-- /core/puppeteer
+|   |-- pspScraper.ts     # Scraper for PSP
+|   |-- aversiScraper.ts  # Scraper for Aversi
+|-- /models
+|   |-- product.ts        # Product data model
+|-- /ui
+|   |-- SearchInput.tsx   # Reusable search input component
+```
 
-## Deploy on Vercel
+## Future Improvements
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Add more pharmacy scrapers.
+- Implement a caching layer to reduce redundant scraping.
+- Add unit and integration tests.
+- Improve error handling and logging.
