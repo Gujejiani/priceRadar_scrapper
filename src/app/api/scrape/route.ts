@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { scrapePsp } from '@/core/puppeteer/pspScraper';
 import { scrapeAversi } from '@/core/puppeteer/aversiScraper';
+import { scrapeGpc } from '@/core/puppeteer/gpcScraper';
 import { filterAndSortProducts } from '@/core/string-utils';
 
 export async function GET(req: NextRequest) {
@@ -15,12 +16,13 @@ export async function GET(req: NextRequest) {
   console.log(`Scraping for query: "${query}"`);
 
   try {
-    const [pspProducts, aversiProducts] = await Promise.all([
+    const [pspProducts, aversiProducts, gpcProducts] = await Promise.all([
       scrapePsp(query),
       scrapeAversi(query),
+      scrapeGpc(query),
     ]);
 
-    const allProducts = [...pspProducts, ...aversiProducts];
+    const allProducts = [...pspProducts, ...aversiProducts, ...gpcProducts];
     const filteredProducts = filterAndSortProducts(query, allProducts);
 
     return NextResponse.json(filteredProducts);
