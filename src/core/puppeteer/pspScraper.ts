@@ -1,10 +1,8 @@
-import puppeteer from 'puppeteer';
+import { Page } from 'puppeteer';
 import { Product } from '@/models/product';
+import { withBrowser } from './withBrowser';
 
-export const scrapePsp = async (query: string): Promise<Product[]> => {
-  const browser = await puppeteer.launch({ headless: false, devtools: false });
-  const page = await browser.newPage();
-
+const scrapePspPage = async (page: Page, query: string): Promise<Product[]> => {
   // Navigate directly to the search results page
   const searchUrl = `https://psp.ge/catalogsearch/result?q=${encodeURIComponent(query)}`;
   await page.goto(searchUrl);
@@ -31,6 +29,7 @@ export const scrapePsp = async (query: string): Promise<Product[]> => {
     });
   });
 
-  await browser.close();
   return products;
 };
+
+export const scrapePsp = withBrowser(scrapePspPage);

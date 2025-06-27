@@ -4,18 +4,23 @@ import { SearchInput } from '@/ui/SearchInput';
 import React, { useState } from 'react';
 import { Product } from '@/models/product';
 import axios from 'axios';
+import { Info } from '@/ui/Info';
 
 export function Search() {
   const [searchTerm, setSearchTerm] = useState('');
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [searched, setSearched] = useState(false);
 
   const handleSearch = async () => {
     if (!searchTerm) return;
 
     console.log('Searching for:', searchTerm);
     setLoading(true);
+    setSearched(true);
     setProducts([]);
+    setError(null);
     try {
       const response = await axios.get('/api/scrape', {
         params: { query: searchTerm },
@@ -23,6 +28,7 @@ export function Search() {
       setProducts(response.data);
     } catch (error) {
       console.error('Failed to fetch products:', error);
+      setError('Something went wrong. Please try again later.');
     } finally {
       setLoading(false);
     }
@@ -36,6 +42,10 @@ export function Search() {
         onSearch={handleSearch}
       />
       {loading && <p className="text-center mt-4">Loading...</p>}
+      {error && <Info message={error} type="error" />}
+      {searched && !loading && !error && products.length === 0 && (
+        <Info message="No products found. Try a different search term." />
+      )}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-8">
         {products.map((product) => (
           <div key={product.link} className="border rounded-lg p-4 relative">
