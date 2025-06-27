@@ -7,8 +7,13 @@ const scrapeAversiPage = async (page: Page, query: string): Promise<Product[]> =
   const searchUrl = `https://www.aversi.ge/ka/aversi/act/searchMedicine/?kw_ka=${encodeURIComponent(query)}&ka_search=on`;
   await page.goto(searchUrl);
 
-  // Wait for the search results to load
-  await page.waitForSelector('.product');
+  // Wait for the search results to load, but handle timeouts
+  try {
+    await page.waitForSelector('.product', { timeout: 2000 });
+  } catch {
+    console.log(`in Aversi Selector ".product" not found for query: "${query}". Returning empty array.`);
+    return [];
+  }
 
   // Scrape the product data
   const products = await page.evaluate(() => {

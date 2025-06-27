@@ -7,8 +7,13 @@ const scrapePspPage = async (page: Page, query: string): Promise<Product[]> => {
   const searchUrl = `https://psp.ge/catalogsearch/result?q=${encodeURIComponent(query)}`;
   await page.goto(searchUrl);
 
-  // Wait for the search results to load
-  await page.waitForSelector('.product');
+  // Wait for the search results to load, but handle timeouts
+  try {
+    await page.waitForSelector('.product', { timeout: 2000 });
+  } catch {
+    console.log(`In Psp Selector ".product" not found for query : "${query}". Returning empty array.`);
+    return [];
+  }
 
   // Scrape the product data
   const products = await page.evaluate(() => {
