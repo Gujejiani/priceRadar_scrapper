@@ -9,7 +9,7 @@ export default function Home() {
       <main className="flex flex-col items-center flex-1 p-24">
         <h2 className="text-4xl font-bold mb-4">Welcome to PharmacyRadar</h2>
         <p className="text-lg text-gray-600 mb-8">
-          Your one-stop shop for comparing pharmacy prices.
+    იპოვე შენი საყვარელი პროდუქტები ფასის მიხედვით სხვადასხვა აფთიაქებში
         </p>
         <Search />
       </main>

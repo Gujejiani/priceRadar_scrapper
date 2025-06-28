@@ -10,7 +10,16 @@ const normalizeName = (name: string): string => {
     .trim();
 };
 
-// 2. Filter and sort products based on string similarity
+// 2. Parse price strings to numbers for comparison
+const parsePrice = (price: string): number => {
+  if (price.toLowerCase() === 'n/a') {
+    return Infinity;
+  }
+  const match = price.replace(',', '.').match(/(\d+(\.\d+)?)/);
+  return match ? parseFloat(match[0]) : Infinity;
+};
+
+// 3. Filter and sort products based on string similarity and price
 export const filterAndSortProducts = (
   query: string,
   products: Product[],
@@ -31,9 +40,9 @@ export const filterAndSortProducts = (
     (product) => product.similarity >= similarityThreshold
   );
 
-  // Sort by similarity in descending order
+  // Sort by price in ascending order
   const sortedProducts = filteredProducts.sort(
-    (a, b) => b.similarity - a.similarity
+    (a, b) => parsePrice(a.price) - parsePrice(b.price)
   );
 
   return sortedProducts;

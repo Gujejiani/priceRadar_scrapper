@@ -28,23 +28,24 @@ export function Search() {
       setProducts(response.data);
     } catch (error) {
       console.error('Failed to fetch products:', error);
-      setError('Something went wrong. Please try again later.');
+      setError('რაღაც არასწორად მოხდა. გთხოვთ, სცადოთ მოგვიანებით.');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div>
+    <div className="w-full max-w-4xl">
       <SearchInput
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
         onSearch={handleSearch}
+        disabled={loading}
       />
-      {loading && <p className="text-center mt-4">Loading...</p>}
+      {loading && <p className="text-center mt-4">იტვირთება...</p>}
       {error && <Info message={error} type="error" />}
       {searched && !loading && !error && products.length === 0 && (
-        <Info message="No products found. Try a different search term." />
+        <Info message="პროდუქტები ვერ მოიძებნა. სცადეთ სხვა საძიებო სიტყვა." />
       )}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-8">
         {products.map((product) => (
@@ -56,7 +57,7 @@ export function Search() {
             <h2 className="text-lg font-semibold">{product.name}</h2>
             <p className="text-xl font-bold text-green-600">{product.price}</p>
             <a href={product.link} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">
-              View Product
+              პროდუქტის ნახვა
             </a>
           </div>
         ))}
