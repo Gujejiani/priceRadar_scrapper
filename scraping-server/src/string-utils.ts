@@ -1,5 +1,6 @@
-import { Product } from '@/models/product';
 import stringSimilarity from 'string-similarity';
+import { Product } from '@/models/product';
+
 
 // 1. Normalize product names for better comparison
 const normalizeName = (name: string): string => {

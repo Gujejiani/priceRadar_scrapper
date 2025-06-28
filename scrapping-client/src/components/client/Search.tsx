@@ -1,0 +1,68 @@
+'use client';
+
+import { SearchInput } from '@/ui/SearchInput';
+import React, { useState } from 'react';
+
+import axios from 'axios';
+import { Info } from '@/ui/Info';
+import { Product } from '@/models/product';
+
+export function Search() {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [searched, setSearched] = useState(false);
+
+  const handleSearch = async () => {
+    if (!searchTerm) return;
+
+    console.log('Searching for:', searchTerm);
+    setLoading(true);
+    setSearched(true);
+    setProducts([]);
+    setError(null);
+    try {
+      const response = await axios.get('/api/scrape', {
+        params: { query: searchTerm },
+      });
+      setProducts(response.data);
+    } catch (error) {
+      console.error('Failed to fetch products:', error);
+      setError('რაღაც არასწორად მოხდა. გთხოვთ, სცადოთ მოგვიანებით.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="w-full max-w-4xl">
+      <SearchInput
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        onSearch={handleSearch}
+        disabled={loading}
+      />
+      {loading && <p className="text-center mt-4">იტვირთება...</p>}
+      {error && <Info message={error} type="error" />}
+      {searched && !loading && !error && products.length === 0 && (
+        <Info message="პროდუქტები ვერ მოიძებნა. სცადეთ სხვა საძიებო სიტყვა." />
+      )}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-8">
+        {products.map((product) => (
+          <div key={product.link} className="border rounded-lg p-4 relative">
+            <div className="absolute top-2 left-2 bg-gray-800 text-white text-xs px-2 py-1 rounded">
+              {product.source}
+            </div>
+            <img src={product.imageUrl} alt={product.name} className="w-full h-48 object-cover mb-4" />
+            <h2 className="text-lg font-semibold">{product.name}</h2>
+            <p className="text-xl font-bold text-green-600">{product.price}</p>
+            <a href={product.link} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">
+              პროდუქტის ნახვა
+            </a>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
