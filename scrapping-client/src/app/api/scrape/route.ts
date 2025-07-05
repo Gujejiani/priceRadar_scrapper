@@ -15,12 +15,18 @@ export async function GET(req: NextRequest) {
     // Call the scraping-server endpoint
     const apiRes = await fetch(`http://localhost:8080/scrape?query=${encodeURIComponent(query)}`);
     if (!apiRes.ok) {
-      return NextResponse.json({ error: 'Failed to fetch from scraping server' }, { status: 500 });
+      let errorBody;
+      try {
+        errorBody = await apiRes.json();
+      } catch {
+        errorBody = { error: await apiRes.text() };
+      }
+      return NextResponse.json(errorBody, { status: apiRes.status });
     }
     const data = await apiRes.json();
     return NextResponse.json(data);
   } catch (error) {
     console.error('Proxy to scraping-server failed:', error);
-    return NextResponse.json({ error: 'Failed to proxy to scraping server' }, { status: 500 });
+    return NextResponse.json({ error: error instanceof Error ? error.message : String(error) }, { status: 500 });
   }
 }
