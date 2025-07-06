@@ -4,7 +4,7 @@ import { withBrowser } from './withBrowser';
 
 const scrapePharmadepotPage = async (page: Page, query: string): Promise<Product[]> => {
   const searchUrl = `https://pharmadepot.ge/ka/search?keyword=${encodeURIComponent(query)}`;
-  await page.goto(searchUrl, { waitUntil: 'networkidle2' });
+  await page.goto(searchUrl, { waitUntil: 'domcontentloaded', timeout: 60000 });
 
   try {
     await page.waitForSelector('a[hreflang="ka"]', { timeout: 5000 });

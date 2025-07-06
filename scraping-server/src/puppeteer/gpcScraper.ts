@@ -3,8 +3,8 @@ import { Product } from '@/models/product';
 import { withBrowser } from './withBrowser';
 
 const scrapeGpcPage = async (page: Page, query: string): Promise<Product[]> => {
-  const searchUrl = `https://gpc.ge/ka/search?keyword=${encodeURIComponent(query)}`;
-  await page.goto(searchUrl);
+  const searchUrl = `https://www.gpc.ge/ka/search/?q=${encodeURIComponent(query)}`;
+  await page.goto(searchUrl, { waitUntil: 'domcontentloaded', timeout: 60000 });
 
   try {
     await page.waitForSelector('div[class*="flex flex-col"] a', { timeout: 10000 });

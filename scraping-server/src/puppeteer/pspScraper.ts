@@ -4,8 +4,8 @@ import { withBrowser } from './withBrowser';
 
 const scrapePspPage = async (page: Page, query: string): Promise<Product[]> => {
   // Navigate directly to the search results page
-  const searchUrl = `https://psp.ge/catalogsearch/result?q=${encodeURIComponent(query)}`;
-  await page.goto(searchUrl);
+  const searchUrl = `https://www.psp.ge/search?keyword=${encodeURIComponent(query)}`;
+  await page.goto(searchUrl, { waitUntil: 'domcontentloaded', timeout: 60000 });
 
   // Wait for the search results to load, but handle timeouts
   try {
