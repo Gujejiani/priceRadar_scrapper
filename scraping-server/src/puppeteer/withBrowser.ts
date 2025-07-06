@@ -1,4 +1,7 @@
-import puppeteer, { Browser, Page, LaunchOptions } from 'puppeteer';
+import puppeteer from 'puppeteer-extra';
+import StealthPlugin from 'puppeteer-extra-plugin-stealth';
+puppeteer.use(StealthPlugin());
+import type { Page, Browser, LaunchOptions } from 'puppeteer';
 
 type ScraperFunction<T> = (page: Page, query: string) => Promise<T>;
 

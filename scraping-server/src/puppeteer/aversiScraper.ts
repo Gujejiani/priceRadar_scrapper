@@ -4,8 +4,8 @@ import { withBrowser } from './withBrowser';
 
 const scrapeAversiPage = async (page: Page, query: string): Promise<Product[]> => {
   // Navigate directly to the search results page
-  const searchUrl = `https://www.aversi.ge/ka/search?q=${encodeURIComponent(query)}`;
-  await page.goto(searchUrl, { waitUntil: 'domcontentloaded', timeout: 60000 });
+  const searchUrl = `https://www.aversi.ge/ka/aversi/act/searchMedicine/?kw_ka=${encodeURIComponent(query)}&ka_search=on`;
+  await page.goto(searchUrl);
 
   // Wait for the search results to load, but handle timeouts
   try {
