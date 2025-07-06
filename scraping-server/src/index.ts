@@ -15,7 +15,7 @@ app.use(express.json());
 const enabledPharmacies = [
   { name: 'psp', scraper: scrapePsp },
   // { name: 'aversi', scraper: scrapeAversi },
-  // { name: 'gpc', scraper: scrapeGpc },
+  { name: 'gpc', scraper: scrapeGpc },
   // { name: 'pharmadepot', scraper: scrapePharmadepot },
   // To exclude a pharmacy, just comment it out or remove it from this array
 ];
